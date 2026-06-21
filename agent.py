@@ -591,7 +591,7 @@ def run_review(source: str) -> str:
     print("=" * 60)
 
     report_path = "review_report.md"
-    with open(report_path, "w") as f:
+    with open(report_path, "w", encoding="utf-8") as f:
         f.write(report)
     print(f"\n✅ Report saved to: {report_path}")
     return report
