@@ -11,17 +11,17 @@
 |------|----------|------|----------|---------|-------------|
 | `eslint.config.js` | 🟡 MEDIUM | 0 | 0 | 1 | 0 |
 | `index.html` | 🟢 LOW | 0 | 0 | 1 | 0 |
-| `package-lock.json` | 🟡 MEDIUM | 0 | 0 | 1 | 0 |
+| `package-lock.json` | 🟡 MEDIUM | 0 | 0 | 2 | 0 |
 | `package.json` | 🟡 MEDIUM | 0 | 0 | 1 | 0 |
 | `App.jsx` | 🟡 MEDIUM | 0 | 0 | 0 | 0 |
-| `axios.js` | 🟠 HIGH | 0 | 1 | 0 | 0 |
+| `axios.js` | 🟠 HIGH | 0 | 1 | 1 | 0 |
 | `index.css` | 🟢 LOW | 0 | 0 | 0 | 0 |
 | `main.jsx` | 🟢 LOW | 0 | 0 | 0 | 0 |
 | `Dashboard.jsx` | 🟠 HIGH | 1 | 1 | 3 | 1 |
-| `GroupPage.jsx` | 🟠 HIGH | 3 | 2 | 6 | 2 |
+| `GroupPage.jsx` | 🟠 HIGH | 3 | 2 | 5 | 2 |
 | `Login.css` | 🟢 LOW | 0 | 0 | 0 | 0 |
 | `Login.jsx` | 🟠 HIGH | 0 | 1 | 1 | 0 |
-| `Register.jsx` | 🟡 MEDIUM | 0 | 1 | 1 | 0 |
+| `Register.jsx` | 🟡 MEDIUM | 0 | 1 | 1 | 1 |
 | `vite.config.js` | 🟢 LOW | 0 | 0 | 0 | 0 |
 
 ---
@@ -32,11 +32,11 @@
 **Severity:** 🟡 MEDIUM
 
 **🧹 Quality:**
-- The use of 'globalIgnores' is not standard in ESLint configurations and may lead to confusion. Consider using 'overrides' for better clarity.
+- The use of 'globalIgnores' is not standard in ESLint configurations and may lead to confusion. Consider using 'ignorePatterns' instead for clarity.
 
 **💡 Suggestions:**
-- Consider adding a 'parser' option in 'parserOptions' to specify the JavaScript parser being used, which can improve compatibility.
-- Ensure that the ESLint plugins and configurations are up to date to avoid potential issues with deprecated features.
+- Consider adding a 'parser' option in 'parserOptions' to specify the JavaScript parser being used, which can improve compatibility and performance.
+- Ensure that the ESLint plugins and configurations are up to date to leverage the latest features and fixes.
 
 ---
 
@@ -44,10 +44,10 @@
 **Severity:** 🟢 LOW
 
 **🧹 Quality:**
-- Inline styles are used, which can lead to duplication and make maintenance harder. Consider using a separate CSS file.
+- Inline styles are used, which can lead to duplication and make maintenance harder. Consider using a separate CSS file for styles.
 
 **💡 Suggestions:**
-- Consider adding a `<meta name='description' content='...'>` tag for better SEO.
+- Consider adding a `<meta name='description'>` tag for better SEO.
 - Use a more descriptive title for better user experience and SEO.
 - Consider using a CSS framework or preprocessor for better styling management.
 
@@ -57,9 +57,12 @@
 **Severity:** 🟡 MEDIUM
 
 **🧹 Quality:**
+- The versioning for dependencies is using caret (^) which may lead to unexpected breaking changes if a new major version is released. Consider using exact versions or a more controlled versioning strategy.
 - The 'engines' field specifies a wide range of Node.js versions (>= 0.4) which may lead to compatibility issues with modern libraries and features.
 
 **💡 Suggestions:**
+- Regularly update dependencies to their latest stable versions to benefit from performance improvements and security patches.
+- Consider adding a `scripts` section to define common commands for building, testing, and linting the project.
 - Consider updating the 'engines' field to a more recent version of Node.js to ensure compatibility with current libraries and features.
 - Review the dependencies for any that may be outdated or have known vulnerabilities.
 - Consider updating the 'node' engine version in 'engines' to a more recent version to ensure compatibility with the latest features and security updates.
@@ -95,8 +98,12 @@
 **🔒 Security:**
 - Using 'http' instead of 'https' for the baseURL can expose the application to man-in-the-middle attacks.
 
+**🧹 Quality:**
+- The baseURL is hardcoded to 'http://localhost:8080', which may not be suitable for production environments. Consider using environment variables.
+
 **💡 Suggestions:**
-- Consider using environment variables for the baseURL to allow for different configurations in development and production environments.
+- Use environment variables to set the baseURL for different environments (development, testing, production).
+- Consider adding error handling for API requests to improve robustness.
 
 ---
 
@@ -104,8 +111,8 @@
 **Severity:** 🟢 LOW
 
 **💡 Suggestions:**
-- Consider using a more specific selector instead of '*' to avoid unintended styling on all elements.
-- Add a fallback font in case the Google Font fails to load.
+- Consider using a local font fallback in case the Google Fonts service is unavailable.
+- Add a more specific selector for the universal selector (*) to avoid unintended styling on all elements.
 
 ---
 
@@ -122,23 +129,22 @@
 **Severity:** 🟠 HIGH
 
 **🐛 Bugs:**
-- Line 36: fetchGroups is called without userId dependency in useEffect, which may lead to stale data if userId changes.
+- Line 36: fetchGroups is called without userId dependency in useEffect, which may lead to stale closure issues.
 
 **🔒 Security:**
-- Using localStorage for sensitive data (userId, userName) can lead to security vulnerabilities, as it can be accessed by any script running on the page.
+- Using localStorage for sensitive information (userId, userName) can lead to security vulnerabilities such as XSS attacks.
 
 **🧹 Quality:**
-- Inline styles are used extensively, which can lead to duplication and make the code harder to maintain. Consider using CSS classes instead.
+- Inline styles are used extensively, which can lead to duplication and make the code harder to maintain. Consider using CSS classes.
 - Inline styles are used extensively, which can lead to duplication and make the code harder to maintain. Consider using CSS classes instead.
 - The function 'createGroup' is called directly in the onClick handler without checking if 'newGroupName' is valid, which could lead to unexpected behavior.
 
 **⚡ Performance:**
-- Fetching groups every time a new group is created can lead to unnecessary network requests. Consider updating the state directly instead of refetching.
+- Fetching groups again after creating a group can lead to unnecessary network requests. Consider updating the state directly instead.
 
 **💡 Suggestions:**
-- Add error handling for the case when userId is not found in localStorage to improve user experience.
-- Consider using a state management solution (like Redux) for better state handling, especially if the app grows.
-- Consider using a CSS-in-JS library or a CSS module to manage styles more effectively.
+- Add error handling for the fetchGroups function to inform the user if the fetch fails. Consider using a loading state while fetching data.
+- Consider using a CSS-in-JS solution or a CSS module to manage styles more effectively.
 - Add validation for 'newGroupName' before calling 'createGroup' to ensure it is not empty or invalid.
 - Use a more descriptive name for 'showModal' to clarify its purpose, such as 'isModalVisible'.
 
@@ -148,35 +154,31 @@
 **Severity:** 🟠 HIGH
 
 **🐛 Bugs:**
-- Line 66: The `fetchGroupMembers` function does not handle the case where the API call fails, which could lead to an undefined state for `groupMemberIds`.
-- Line 66: 'group?.name' may cause a runtime error if 'group' is undefined.
-- Line 118: 'expense.paidBy?.id' may cause a runtime error if 'expense.paidBy' is undefined.
+- Line 66: The `useEffect` dependency array is empty, which may lead to unexpected behavior if the component re-renders.
+- Potential null reference on line 36: 'group?.name' if 'group' is undefined.
+- Potential null reference on line 78: 'expense.paidBy?.id' if 'expense.paidBy' is undefined.
 
 **🔒 Security:**
-- Using `localStorage` to store sensitive information like `userId` and `userName` can lead to security vulnerabilities, as this data can be accessed by any script running on the page.
-- Line 118: User input (user.id) is directly used in the API call without validation or sanitization, which could lead to injection attacks.
+- Using `localStorage` to store sensitive information like `userId` and `userName` can expose them to XSS attacks.
+- Using 'api.post' without proper error handling or user feedback can lead to a poor user experience and potential security issues if the API exposes sensitive information.
 
 **🧹 Quality:**
-- Line 12: The variable names like `showExpenseModal`, `showDebts`, and `showMemberModal` could be more descriptive to improve readability.
-- Line 66: The error handling in `fetchGroupMembers` is too generic and does not provide feedback to the user.
-- Line 66: The use of inline styles throughout the component reduces readability and maintainability. Consider using a CSS-in-JS solution or external stylesheets.
-- Line 118: The variable 'alreadyMember' is defined but not used in a meaningful way to prevent adding the same member multiple times.
+- Line 12: The variable names like `showExpenseModal`, `showDebts`, etc. could be more descriptive to improve readability.
 - Inline styles are used extensively, which can lead to duplication and make the code harder to maintain. Consider using CSS classes instead.
-- The button text for adding an expense is hardcoded. Consider using a constant or a translation mechanism for better maintainability.
+- The use of 'i' as a key in the map function on line 66 is not recommended as it can lead to issues with component state and re-rendering.
+- Inline styles are used extensively, which can lead to duplication and make the code harder to maintain. Consider using a CSS-in-JS solution or external stylesheets.
+- The button text for adding an expense is hardcoded. Consider using a constant or a translation function for better maintainability.
 
 **⚡ Performance:**
-- Multiple API calls are made in the `useEffect` hook without any dependency array, which can lead to unnecessary re-fetching of data on every render.
-- Line 118: The API call to add a member is made without debouncing or throttling, which could lead to multiple rapid requests if the button is clicked multiple times.
+- Multiple API calls are made in sequence within `useEffect`, which could lead to performance issues. Consider using `Promise.all` to fetch data concurrently.
+- Mapping over 'balances' and 'expenses' without memoization can lead to performance issues if these arrays are large. Consider using React.memo or useMemo.
 
 **💡 Suggestions:**
-- Consider using a state management solution (like Redux or Context API) to manage user data instead of relying on `localStorage`.
-- Implement loading states for the API calls to improve user experience.
-- Add error handling that provides user feedback instead of just logging to the console.
-- Use `useEffect` dependencies to control when data fetching occurs, preventing unnecessary API calls.
-- Consider using a state management solution (like Redux or Context API) to manage the group state and user data more effectively.
-- Implement error handling for the API call to provide user feedback in case of failure.
-- Refactor the inline styles into a separate style object or CSS module to improve readability and maintainability.
-- Consider extracting the modal styles into a separate CSS file or a styled component to improve readability and maintainability.
+- Add error handling for API calls to provide user feedback in case of failures. Consider using a loading state to improve user experience while data is being fetched.
+- Consider using a CSS-in-JS library or CSS modules to manage styles more effectively.
+- Implement error handling and user feedback for API calls to improve user experience.
+- Use unique identifiers for keys in map functions to avoid potential issues with React's reconciliation process.
+- Consider extracting the modal styles into a separate CSS class to improve readability and maintainability.
 - Use controlled components for the input fields to ensure that the state is always in sync with the input values.
 - Add validation for the expense amount input to ensure it is a positive number before allowing the addition of an expense.
 
@@ -196,15 +198,15 @@
 **Severity:** 🟠 HIGH
 
 **🔒 Security:**
-- Storing sensitive information like userId and userName in localStorage can lead to security vulnerabilities. Consider using more secure storage methods or encrypting the data.
+- Storing sensitive information like userId and userName in localStorage can lead to security vulnerabilities, such as XSS attacks.
 
 **🧹 Quality:**
-- The error messages for email and password are set directly in the catch block. Consider creating a centralized error handling mechanism to improve maintainability.
+- The error handling in the catch block could be improved for better clarity and maintainability.
 
 **💡 Suggestions:**
-- Consider using a library like Formik or React Hook Form for better form handling and validation.
-- Use a more descriptive name for the `handleSubmit` function, such as `handleLoginSubmit`, to clarify its purpose.
-- Add accessibility features such as aria-labels for better screen reader support.
+- Consider using a more secure method for storing user authentication tokens, such as HttpOnly cookies.
+- Implement a loading state during the API call to improve user experience.
+- Use a single state object for form inputs and errors to reduce the number of useState calls.
 
 ---
 
@@ -215,11 +217,14 @@
 - Potential exposure of sensitive information (password) in error messages.
 
 **🧹 Quality:**
-- Error handling could be improved by providing more specific feedback to the user.
+- Inconsistent naming for error state variables (e.g., nameError, emailError, passwordError) could be grouped into a single state object for better organization.
+
+**⚡ Performance:**
+- Repeated validation functions on every submit could be optimized by consolidating them into a single validation function.
 
 **💡 Suggestions:**
-- Consider using a more robust form validation library to handle validations more cleanly.
-- Use a loading state to indicate to the user that the registration is in progress.
+- Consider using a form library like Formik or React Hook Form for better form management and validation.
+- Use a more descriptive error handling mechanism instead of setting a generic error message for registration failure.
 
 ---
 
@@ -236,12 +241,12 @@
 
 - 🐛 **Bugs:** 4
 - 🔒 **Security Issues:** 6
-- 🧹 **Quality Issues:** 15
-- ⚡ **Performance Issues:** 3
-- 💡 **Suggestions:** 44
+- 🧹 **Quality Issues:** 16
+- ⚡ **Performance Issues:** 4
+- 💡 **Suggestions:** 43
 
 ---
 
 ## 🔧 Auto-Fix PR
 
-Fixes have been applied and submitted: **https://github.com/Sujal-781/EasySettle/pull/1**
+Fixes have been applied and submitted: **https://github.com/Sujal-781/EasySettle/pull/2**
