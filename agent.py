@@ -13,9 +13,19 @@ import re
 import json
 import base64
 import requests
+import urllib3
 from pathlib import Path
 from typing import TypedDict, List, Optional
 from dotenv import load_dotenv
+
+# Disable SSL verification globally — handles corporate proxy / self-signed certs
+# (common on Accenture / enterprise networks)
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+_orig_request = requests.Session.request
+def _no_verify_request(self, method, url, **kwargs):
+    kwargs.setdefault("verify", False)
+    return _orig_request(self, method, url, **kwargs)
+requests.Session.request = _no_verify_request
 
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
